@@ -7,7 +7,8 @@ const ValidateLogin = Joi.object().keys({
 
 const ValidateRegister = Joi.object().keys({
   username: Joi.string().alphanum().min(3).max(30),
-  password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required()
+  password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
+  location: Joi.string().min(3)
 }).with('username', 'password');
 
 const ValidateGetUser = Joi.object().keys({
@@ -15,12 +16,17 @@ const ValidateGetUser = Joi.object().keys({
 });
 
 const ValidateUpdateUser = Joi.object().keys({
-  username: Joi.string().alphanum().min(3).max(30)
+  location: Joi.string().min(3).max(30)
+});
+
+const ValidateCreateMuse = Joi.object().keys({
+  content: Joi.string().required()
 });
 
 exports = module.exports = {
   ValidateLogin,
   ValidateRegister,
   ValidateGetUser,
-  ValidateUpdateUser
+  ValidateUpdateUser,
+  ValidateCreateMuse
 };

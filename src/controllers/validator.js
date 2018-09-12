@@ -2,17 +2,19 @@ const {
   ValidateLogin,
   ValidateRegister,
   ValidateGetUser,
-  ValidateUpdateUser
+  ValidateUpdateUser,
+  ValidateCreateMuse
 } = require('../../config/validatorSchema');
-
 const {
   ValidationError
 } = require('../utils/errors');
 
+const validationErr = new ValidationError('Input fields do not meet criteria');
+
 const login = (req, res, next) => {
   const {error, value} = ValidateLogin.validate(req.body);
   if(error) {
-    return next(new ValidationError('Inputs do not meet criteria'));
+    return next(validationErr);
   }
   req.parsed = value;
   next();
@@ -21,7 +23,7 @@ const login = (req, res, next) => {
 const register = (req, res, next) => {
   const {error, value} = ValidateRegister.validate(req.body);
   if(error) {
-    return next(new ValidationError('Inputs do not meet criteria'));
+    return next(validationErr);
   }
   req.parsed = value;
   next();
@@ -30,7 +32,7 @@ const register = (req, res, next) => {
 const getUser = (req, res, next) => {
   const {error, value} = ValidateGetUser.validate(req.params);
   if(error) {
-    return next(new ValidationError('Inputs do not meet criteria'));
+    return next(validationErr);
   }
   req.params = value;
   next();
@@ -39,7 +41,16 @@ const getUser = (req, res, next) => {
 const updateUser = (req, res, next) => {
   const {error, value} = ValidateUpdateUser.validate(req.body);
   if(error) {
-    return next(new ValidationError('Inputs do not meet criteria'));
+    return next(validationErr);
+  }
+  req.parsed = value;
+  next();
+};
+
+const createMuse = (req, res, next) => {
+  const {error, value} = ValidateCreateMuse.validate(req.body);
+  if(error) {
+    return next(validationErr);
   }
   req.parsed = value;
   next();
@@ -49,5 +60,6 @@ exports = module.exports = {
   login,
   register,
   getUser,
-  updateUser
+  updateUser,
+  createMuse
 };

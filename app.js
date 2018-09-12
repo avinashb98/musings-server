@@ -32,7 +32,6 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 // Using CORS
 app.use(cors());
 
-app.use(bodyParser.urlencoded({ extended: false }));
 // Router Initialization
 app.get('/v1', (req, res) => {
   res.status(200).json({

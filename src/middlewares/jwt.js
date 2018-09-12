@@ -16,22 +16,19 @@ const sendToken = (req, res) => {
 const verifyToken = (req, res, next) => {
   let token = null;
   const bearerHeader = req.headers.authorization;
-  // check if bearer is undefined
   if (typeof bearerHeader !== 'undefined') {
-    // Split at space
     const bearer = bearerHeader.split(' ');
-    // get token from array
     const bearerToken = bearer[1];
-    // set the token
     token = bearerToken;
   } else {
     return next(new AuthorizationError('Did not receive token'));
   }
   
-  jwt.verify(token, process.env.SECRET, (err) => {
+  jwt.verify(token, process.env.SECRET, (err, decoded) => {
     if(err) {
       return next(new AuthorizationError('Token Invalid. Forbidden!'));
     }
+    req.decoded = decoded;
     next();
   });
 };

@@ -1,4 +1,5 @@
 const User = require('../models/users');
+const Muses = require('../models/muses');
 const {
   ValidationError,
   PermissionError,
@@ -43,22 +44,26 @@ const getUser = async(req, res) => {
   }
 };
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
   const user = new User();
   user.username = req.parsed.username;
   user.password = req.parsed.password;
+  user.location = req.parsed.location;
   try {
     await user.save();
-    res.status(201).json({
-      msg: 'User successfuly registered'
-    });
   } catch (error) {
-    next(new DatabaseError('Error in fetching user Info'));
+    console.log(error);
+    next(new DatabaseError('Error in creating user'));
   }
+  res.status(201).json({
+    message:"User successfully created",
+    username: req.parsed.username,
+    location: req.parsed.location
+  })
 };
 
-const update = async(req, res) => {
-  const username = req.parsed.username;
+const update = async(req, res, next) => {
+  const username = req.decoded.username;
   let user = null;
   try {
     user = await User.findOne({username});
@@ -71,7 +76,7 @@ const update = async(req, res) => {
     return next(new NotFoundError('No user in the database'));
   }
 
-  user.location = req.body.location;
+  user.location = req.parsed.location;
   try {
     await user.save();
     res.status(200).json({
