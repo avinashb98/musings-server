@@ -34,7 +34,10 @@ const create = async(req, res) => {
 
   res.status(201).json({
     message: 'Muse successfully created',
-    muse: muse
+    muse: {
+      createdAt: muse.createdAt,
+      content: muse.content
+    }
   });
 }
 
