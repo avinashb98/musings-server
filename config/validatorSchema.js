@@ -23,10 +23,15 @@ const ValidateCreateMuse = Joi.object().keys({
   content: Joi.string().required()
 });
 
+const ValidateRemoveMuse = Joi.object().keys({
+  id: Joi.string().alphanum().required()
+});
+
 exports = module.exports = {
   ValidateLogin,
   ValidateRegister,
   ValidateGetUser,
   ValidateUpdateUser,
-  ValidateCreateMuse
+  ValidateCreateMuse,
+  ValidateRemoveMuse
 };

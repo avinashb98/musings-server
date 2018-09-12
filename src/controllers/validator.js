@@ -3,7 +3,8 @@ const {
   ValidateRegister,
   ValidateGetUser,
   ValidateUpdateUser,
-  ValidateCreateMuse
+  ValidateCreateMuse,
+  ValidateRemoveMuse
 } = require('../../config/validatorSchema');
 const {
   ValidationError
@@ -56,10 +57,20 @@ const createMuse = (req, res, next) => {
   next();
 };
 
+const removeMuse = (req, res, next) => {
+  const {error, value} = ValidateRemoveMuse.validate(req.body);
+  if(error) {
+    return next(validationErr);
+  }
+  req.parsed = value;
+  next();
+};
+
 exports = module.exports = {
   login,
   register,
   getUser,
   updateUser,
-  createMuse
+  createMuse,
+  removeMuse
 };

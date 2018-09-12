@@ -6,5 +6,5 @@ const router = express.Router();
 const jwt = require('../middlewares/jwt');
 
 router.post('/create', jwt.verifyToken, validate.createMuse, muses.create);
-
+router.delete('/remove', jwt.verifyToken, validate.removeMuse, muses.remove);
 module.exports = router;

@@ -23,10 +23,7 @@ const create = async(req, res) => {
   }
 
   const content = req.body.content;
-  const muse = new Muse({
-    author: user._id,
-    content
-  });
+  const muse = new Muse({ author: user._id, content });
   await muse.save();
 
   user.muses.push(muse);
@@ -35,6 +32,7 @@ const create = async(req, res) => {
   res.status(201).json({
     message: 'Muse successfully created',
     muse: {
+      id: muse._id,
       createdAt: muse.createdAt,
       content: muse.content
     }
@@ -42,20 +40,27 @@ const create = async(req, res) => {
 }
 
 const remove = async(req, res) => {
-  const username = req.body.username;
-  const museId = req.body.museId;
+  const museId = req.parsed.id;
+  const username = req.decoded.username;
+
+  try {
+    await Muse.findOneAndDelete({_id: museId});
+  } catch (error) {
+    return next(new DatabaseError('Error in removing muse'));
+  }
   let user = null;
-  let userMuses = null;
   try {
     user = await User.findOne({username});
-    userMuses = await Muse.findById(user.muses);
-    userMuses.muses.push({ content });
-    await userMuses.save();
   } catch (error) {
-    return next(new DatabaseError('Error Removing Muse from DB'));
+    return next(new DatabaseError('Error in removing muse'));    
   }
-  res.status(201).json({
-    msg: 'Muse added successfully'
+  
+  // Remove muse from user document
+  user.muses.splice(user.muses.indexOf(museId), 1);
+  await user.save();
+
+  res.status(200).json({
+    message: 'Muse Successfully Removed'
   });
 }
 
