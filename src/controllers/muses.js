@@ -30,6 +30,7 @@ const create = async(req, res) => {
   await user.save();
 
   res.status(201).json({
+    success: true,
     message: 'Muse successfully created',
     muse: {
       id: muse._id,
@@ -60,6 +61,7 @@ const remove = async(req, res) => {
   await user.save();
 
   res.status(200).json({
+    success: true,
     message: 'Muse Successfully Removed'
   });
 }

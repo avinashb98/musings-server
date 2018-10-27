@@ -33,6 +33,7 @@ const getUser = async(req, res) => {
     }
 
     res.status(200).json({
+      success: true,
       msg: 'User found successfully',
       result: {
         username,
@@ -56,6 +57,7 @@ const register = async (req, res, next) => {
     next(new DatabaseError('Error in creating user'));
   }
   res.status(201).json({
+    success: true,
     message:"User successfully created",
     username: req.parsed.username,
     location: req.parsed.location
@@ -80,6 +82,7 @@ const update = async(req, res, next) => {
   try {
     await user.save();
     res.status(200).json({
+      success: true,
       msg: 'User successfuly updated',
       user: {
         location: user.location

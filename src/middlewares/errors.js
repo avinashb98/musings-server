@@ -27,6 +27,9 @@ const errorHandler = (error, req, res, next) => {
       status = 400;        
   }
 
-  res.status(status).json({ message });
+  res.status(status).json({ 
+    success: true,
+    message
+  });
 }
 exports = module.exports = { errorHandler };
