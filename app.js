@@ -16,10 +16,10 @@ const app = express();
 // Adds helmet middleware
 app.use(helmet());
 
-//Etag disable
+// Etag disable
 app.set('etag', false);
 
-//Body Parser Configuration
+// Body Parser Configuration
 app.use(bodyParser.json({ // to support JSON-encoded bodies
   limit: '1mb'
 }));
@@ -41,4 +41,3 @@ app.get('/v1', (req, res) => {
 app.use('/v1/user', users);
 
 module.exports = app;
-

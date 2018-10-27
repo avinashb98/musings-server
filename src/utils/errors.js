@@ -52,4 +52,4 @@ module.exports = {
   DatabaseError,
   NotFoundError,
   OperationalError
-}
+};

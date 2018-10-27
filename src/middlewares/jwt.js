@@ -1,15 +1,16 @@
 const jwt = require('jsonwebtoken');
 const {
   AuthorizationError,
-  OperationalError
+  OperationalError,
 } = require('../utils/errors');
 
-const sendToken = (req, res) => {
+const sendToken = (req, res, next) => {
   jwt.sign({ username: req.parsed.username }, process.env.SECRET, { expiresIn: '1200s' }, (err, token) => {
-    if(err) {
-      return next(new OperationalError('Could not generate Token'));
+    if (err) {
+      next(new OperationalError('Could not generate Token'));
+      return;
     }
-    res.status(200).json({token});
+    res.status(200).json({ token });
   });
 };
 
@@ -21,19 +22,21 @@ const verifyToken = (req, res, next) => {
     const bearerToken = bearer[1];
     token = bearerToken;
   } else {
-    return next(new AuthorizationError('Did not receive token'));
+    next(new AuthorizationError('Did not receive token'));
+    return;
   }
-  
+
   jwt.verify(token, process.env.SECRET, (err, decoded) => {
-    if(err) {
-      return next(new AuthorizationError('Token Invalid. Forbidden!'));
+    if (err) {
+      next(new AuthorizationError('Token Invalid. Forbidden!'));
+      return;
     }
     req.decoded = decoded;
     next();
   });
 };
 
-exports = module.exports = {
+module.exports = {
   sendToken,
   verifyToken
-}
+};

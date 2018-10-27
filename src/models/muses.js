@@ -1,15 +1,16 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 const User = require('./users');
+
+const { Schema } = mongoose;
 const MuseSchema = new Schema({
-  author: {type: mongoose.Schema.Types.ObjectId, ref: User},
+  author: { type: mongoose.Schema.Types.ObjectId, ref: User },
   content: String,
-  createdAt: {type: Date, default: new Date()},
+  createdAt: { type: Date, default: new Date() },
   lastUpdateAt: { type: Date, default: Date.now }
 });
 
-MuseSchema.post('save', function() {
-  let data = this;
+MuseSchema.post('save', () => {
+  const data = this;
   data.lastUpdateAt = new Date();
 });
 

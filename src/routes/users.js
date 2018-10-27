@@ -2,6 +2,7 @@ const express = require('express');
 const user = require('../controllers/users');
 const validate = require('../controllers/validator');
 const { errorHandler } = require('../middlewares/errors');
+
 const router = express.Router();
 const jwt = require('../middlewares/jwt');
 const muses = require('./muses');

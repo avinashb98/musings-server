@@ -4,7 +4,7 @@ const errorHandler = (error, req, res, next) => {
   winston.error(error.stack);
   const message = error.message || 'Something went wrong';
   let status = null;
-  switch(error.name) {
+  switch (error.name) {
     case 'ValidationError':
       status = 400;
       break;
@@ -22,15 +22,16 @@ const errorHandler = (error, req, res, next) => {
       break;
     case 'OperationalError':
       status = 500;
-      break;    
+      break;
     default:
-      status = 400;        
+      status = 400;
   }
 
-  res.status(status).json({ 
+  res.status(status).json({
     success: true,
     message,
-    data:{}
+    data: {},
   });
-}
-exports = module.exports = { errorHandler };
+};
+
+module.exports = { errorHandler };
