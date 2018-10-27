@@ -35,7 +35,7 @@ const getUser = async(req, res) => {
     res.status(200).json({
       success: true,
       msg: 'User found successfully',
-      result: {
+      data: {
         username,
         location: user.location
       }
@@ -55,12 +55,15 @@ const register = async (req, res, next) => {
   } catch (error) {
     console.log(error);
     next(new DatabaseError('Error in creating user'));
+    return;
   }
   res.status(201).json({
     success: true,
     message:"User successfully created",
-    username: req.parsed.username,
-    location: req.parsed.location
+    data: {
+      username: req.parsed.username,
+      location: req.parsed.location
+    },
   })
 };
 
@@ -70,9 +73,8 @@ const update = async(req, res, next) => {
   try {
     user = await User.findOne({username});
   } catch (error) {
-    res.status(400).json({
-      msg: 'Some error occurred'
-    });
+    next(new DatabaseError('Some error occurred'));
+    return;
   }
   if(user === null) {
     return next(new NotFoundError('No user in the database'));
@@ -84,8 +86,10 @@ const update = async(req, res, next) => {
     res.status(200).json({
       success: true,
       msg: 'User successfuly updated',
-      user: {
-        location: user.location
+      data: {
+        user: {
+          location: user.location
+        }
       }
     });
   } catch (error) {

@@ -32,11 +32,13 @@ const create = async(req, res) => {
   res.status(201).json({
     success: true,
     message: 'Muse successfully created',
-    muse: {
-      id: muse._id,
-      createdAt: muse.createdAt,
-      content: muse.content
-    }
+    data: {
+      muse: {
+        id: muse._id,
+        createdAt: muse.createdAt,
+        content: muse.content
+      }
+    },
   });
 }
 
@@ -49,6 +51,7 @@ const remove = async(req, res) => {
   } catch (error) {
     return next(new DatabaseError('Error in removing muse'));
   }
+
   let user = null;
   try {
     user = await User.findOne({username});
@@ -62,7 +65,8 @@ const remove = async(req, res) => {
 
   res.status(200).json({
     success: true,
-    message: 'Muse Successfully Removed'
+    message: 'Muse Successfully Removed',
+    data: {}
   });
 }
 
